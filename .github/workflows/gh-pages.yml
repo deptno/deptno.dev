@@ -1,0 +1,29 @@
+name: deploy gh pages
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  github-pages:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: checkout
+        uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v2
+      - name: deploy
+        run: |
+          pnpm turbo run build --no-cache
+          touch .nojekyll
+#          cp -r public out/
+          git config --global user.name github-actions
+          git config --global user.email deptno@gmail.com
+          git config --global init.defaultBranch main
+          cd out
+          git init
+          git remote add origin https://deptno:${{ secrets.GITHUB_TOKEN }}@github.com/deptno/deptno.github.io 
+          git add .
+          git commit -m "from deptno.dev"
+          git push -f --set-upstream origin main
