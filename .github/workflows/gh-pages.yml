@@ -5,28 +5,44 @@ on:
     branches:
       - main
 
+permissions:
+  contents: write
+
 jobs:
   github-pages:
     runs-on: ubuntu-latest
 
     steps:
-      - name: checkout
+      - name: Checkout
         uses: actions/checkout@v4
-      - name: setup pnpm
+
+      - name: Setup pnpm
         uses: pnpm/action-setup@v4
         with:
-          version: '10'
-      - name: deploy
+          version: 10
+          run_install: false
+
+      - name: Install dependencies
+        run: pnpm install
+
+      - name: Build
+        run: pnpm run build --no-cache
+
+      - name: Prepare .nojekyll
         run: |
-          pnpm run build --no-cache
-          touch .nojekyll
-#          cp -r public out/
+          mkdir -p out
+          touch out/.nojekyll
+
+      - name: Deploy (manual push)
+        shell: bash
+        run: |
           git config --global user.name github-actions
           git config --global user.email deptno@gmail.com
           git config --global init.defaultBranch main
+
           cd out
           git init
-          git remote add origin https://deptno:${{ secrets.GITHUB_TOKEN }}@github.com/deptno/deptno.github.io 
           git add .
           git commit -m "from deptno.dev"
+          git remote add origin https://deptno:${{ secrets.GITHUB_TOKEN }}@github.com/deptno/deptno.github.io
           git push -f --set-upstream origin main
