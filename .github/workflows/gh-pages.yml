@@ -44,5 +44,5 @@ jobs:
           git init
           git add .
           git commit -m "from deptno.dev"
-          git remote add origin https://deptno:${{ secrets.GITHUB_TOKEN }}@github.com/deptno/deptno.github.io
+          git remote add origin https://deptno:${{ secrets.GH_PAGES_TOKEN }}@github.com/deptno/deptno.github.io
           git push -f --set-upstream origin main
