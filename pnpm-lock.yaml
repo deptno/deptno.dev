@@ -9,7 +9,7 @@ importers:
   .:
     dependencies:
       next:
-        specifier: ~15.5.16
+        specifier: ~15.5.18
         version: 15.5.18(react-dom@19.1.7(react@19.1.7))(react@19.1.7)
       react:
         specifier: 19.1.7
